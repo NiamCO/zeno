@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeno Cloud</title>
+    <link rel="stylesheet" href="../../packages/design-system/theme.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body data-theme="light">
+    <div class="cloud-app">
+        <!-- Header -->
+        <header class="cloud-header">
+            <button class="back-btn" onclick="window.history.back()">
+                <span data-lucide="arrow-left"></span>
+            </button>
+            <h1>Zeno Cloud</h1>
+            <div class="header-actions">
+                <button class="upload-btn" id="upload-btn">
+                    <span data-lucide="upload"></span> Upload
+                </button>
+                <button class="new-folder-btn" id="new-folder-btn">
+                    <span data-lucide="folder-plus"></span> New Folder
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="cloud-layout">
+            <!-- Sidebar -->
+            <aside class="cloud-sidebar">
+                <div class="storage-info">
+                    <div class="storage-progress">
+                        <div class="progress-circle">
+                            <svg width="80" height="80" viewBox="0 0 80 80">
+                                <circle cx="40" cy="40" r="36" fill="none" stroke="var(--zeno-background)" stroke-width="8"/>
+                                <circle cx="40" cy="40" r="36" fill="none" stroke="var(--zeno-accent)" stroke-width="8" 
+                                        stroke-linecap="round" stroke-dasharray="226.194" stroke-dashoffset="67.858"/>
+                            </svg>
+                            <div class="progress-text">
+                                <span class="progress-percent">70%</span>
+                                <span class="progress-label">Used</span>
+                            </div>
+                        </div>
+                        <div class="storage-details">
+                            <div class="storage-used">
+                                <span class="storage-value">11.2 GB</span>
+                                <span class="storage-label">of 16 GB used</span>
+                            </div>
+                            <button class="upgrade-btn">Upgrade</button>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="sidebar-nav">
+                    <div class="nav-section">
+                        <h3>Quick Access</h3>
+                        <div class="nav-item active">
+                            <span data-lucide="home"></span> My Files
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="star"></span> Starred
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="clock"></span> Recent
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="trash-2"></span> Trash
+                        </div>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h3>Folders</h3>
+                        <div class="nav-item">
+                            <span data-lucide="folder"></span> Documents
+                            <span class="item-count">42</span>
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="folder"></span> Images
+                            <span class="item-count">128</span>
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="folder"></span> Videos
+                            <span class="item-count">15</span>
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="folder"></span> Music
+                            <span class="item-count">87</span>
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="folder"></span> Archives
+                            <span class="item-count">23</span>
+                        </div>
+                    </div>
+                    
+                    <div class="nav-section">
+                        <h3>Shared With Me</h3>
+                        <div class="nav-item">
+                            <span data-lucide="users"></span> Team Files
+                            <span class="item-count">18</span>
+                        </div>
+                        <div class="nav-item">
+                            <span data-lucide="share-2"></span> Shared Links
+                            <span class="item-count">7</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Main Content -->
+            <main class="cloud-main">
+                <!-- Toolbar -->
+                <div class="cloud-toolbar">
+                    <div class="toolbar-left">
+                        <div class="view-toggle">
+                            <button class="view-btn active" data-view="grid">
+                                <span data-lucide="grid"></span>
+                            </button>
+                            <button class="view-btn" data-view="list">
+                                <span data-lucide="list"></span>
+                            </button>
+                        </div>
+                        
+                        <div class="path-breadcrumb">
+                            <span class="path-item">Zeno Cloud</span>
+                            <span data-lucide="chevron-right" class="path-separator"></span>
+                            <span class="path-item active">My Files</span>
+                        </div>
+                    </div>
+                    
+                    <div class="toolbar-right">
+                        <div class="search-bar">
+                            <span data-lucide="search"></span>
+                            <input type="text" placeholder="Search files..." id="search-files">
+                        </div>
+                        
+                        <div class="sort-dropdown">
+                            <button class="sort-btn">
+                                <span data-lucide="arrow-up-down"></span>
+                                Sort: Name
+                            </button>
+                        </div>
+                        
+                        <button class="toolbar-btn" id="select-all-btn">
+                            <span data-lucide="check-square"></span>
+                            Select All
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Files Grid/List -->
+                <div class="files-container">
+                    <!-- Files will be loaded here by JavaScript -->
+                    <div class="empty-state" id="empty-state">
+                        <div class="empty-state-icon">
+                            <span data-lucide="cloud"></span>
+                        </div>
+                        <h3>Your cloud is empty</h3>
+                        <p>Upload files or create folders to get started</p>
+                        <button class="btn-primary" id="empty-upload-btn">
+                            <span data-lucide="upload"></span>
+                            Upload First File
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selected Files Actions -->
+                <div class="selection-actions" id="selection-actions">
+                    <div class="selection-count">
+                        <span id="selected-count">0</span> selected
+                    </div>
+                    <div class="selection-buttons">
+                        <button class="selection-btn" id="download-selected">
+                            <span data-lucide="download"></span>
+                            Download
+                        </button>
+                        <button class="selection-btn" id="share-selected">
+                            <span data-lucide="share-2"></span>
+                            Share
+                        </button>
+                        <button class="selection-btn" id="move-selected">
+                            <span data-lucide="folder"></span>
+                            Move
+                        </button>
+                        <button class="selection-btn" id="delete-selected">
+                            <span data-lucide="trash-2"></span>
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Upload Modal -->
+        <div class="upload-modal" id="upload-modal">
+            <div class="upload-modal-content">
+                <div class="upload-modal-header">
+                    <h3>Upload Files</h3>
+                    <button class="close-upload-modal">
+                        <span data-lucide="x"></span>
+                    </button>
+                </div>
+                <div class="upload-modal-body">
+                    <div class="upload-dropzone" id="upload-dropzone">
+                        <div class="dropzone-content">
+                            <span data-lucide="upload-cloud" class="dropzone-icon"></span>
+                            <h4>Drop files here</h4>
+                            <p>or click to browse</p>
+                            <input type="file" id="file-input" multiple style="display: none;">
+                            <button class="btn-outline" id="browse-btn">Browse Files</button>
+                        </div>
+                    </div>
+                    
+                    <div class="upload-queue" id="upload-queue">
+                        <h4>Upload Queue</h4>
+                        <div class="queue-list" id="queue-list">
+                            <!-- Upload items will appear here -->
+                        </div>
+                    </div>
+                </div>
+                <div class="upload-modal-footer">
+                    <button class="btn-outline" id="cancel-upload">Cancel</button>
+                    <button class="btn-primary" id="start-upload">Start Upload</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- File Detail Modal -->
+        <div class="file-detail-modal" id="file-detail-modal">
+            <div class="file-detail-content">
+                <!-- File details loaded by JavaScript -->
+            </div>
+        </div>
+
+        <!-- New Folder Modal -->
+        <div class="folder-modal" id="folder-modal">
+            <div class="folder-modal-content">
+                <div class="folder-modal-header">
+                    <h3>New Folder</h3>
+                    <button class="close-folder-modal">
+                        <span data-lucide="x"></span>
+                    </button>
+                </div>
+                <div class="folder-modal-body">
+                    <div class="form-group">
+                        <label>Folder Name</label>
+                        <input type="text" id="folder-name" placeholder="Enter folder name" value="New Folder">
+                    </div>
+                    <div class="form-group">
+                        <label>Location</label>
+                        <select id="folder-location">
+                            <option value="root">My Files</option>
+                            <option value="documents">Documents</option>
+                            <option value="images">Images</option>
+                            <option value="videos">Videos</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="folder-modal-footer">
+                    <button class="btn-outline" id="cancel-folder">Cancel</button>
+                    <button class="btn-primary" id="create-folder">Create Folder</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Context Menu -->
+        <div class="context-menu" id="context-menu">
+            <div class="context-menu-item" data-action="open">
+                <span data-lucide="eye"></span>
+                Open
+            </div>
+            <div class="context-menu-item" data-action="download">
+                <span data-lucide="download"></span>
+                Download
+            </div>
+            <div class="context-menu-item" data-action="rename">
+                <span data-lucide="edit-2"></span>
+                Rename
+            </div>
+            <div class="context-menu-item" data-action="share">
+                <span data-lucide="share-2"></span>
+                Share
+            </div>
+            <div class="context-menu-item" data-action="star">
+                <span data-lucide="star"></span>
+                Add to Starred
+            </div>
+            <div class="divider"></div>
+            <div class="context-menu-item" data-action="move">
+                <span data-lucide="folder"></span>
+                Move to...
+            </div>
+            <div class="context-menu-item text-danger" data-action="delete">
+                <span data-lucide="trash-2"></span>
+                Move to Trash
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Initialize icons
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
