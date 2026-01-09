@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeno Mail</title>
+    <link rel="stylesheet" href="../../packages/design-system/theme.css">
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://unpkg.com/lucide@latest" defer></script>
+</head>
+<body data-theme="light">
+    <div class="mail-app">
+        <!-- Header -->
+        <header class="mail-header">
+            <button class="back-btn" onclick="window.history.back()">
+                <span data-lucide="arrow-left"></span>
+            </button>
+            <h1>Zeno Mail</h1>
+            <div class="header-actions">
+                <button class="compose-btn">
+                    <span data-lucide="edit-3"></span> Compose
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Layout -->
+        <div class="mail-layout">
+            <!-- Sidebar -->
+            <aside class="mail-sidebar">
+                <div class="folders">
+                    <div class="folder active">
+                        <span data-lucide="inbox"></span> Inbox <span class="count">3</span>
+                    </div>
+                    <div class="folder">
+                        <span data-lucide="send"></span> Sent
+                    </div>
+                    <div class="folder">
+                        <span data-lucide="archive"></span> Archive
+                    </div>
+                    <div class="folder">
+                        <span data-lucide="trash-2"></span> Trash
+                    </div>
+                </div>
+                
+                <div class="labels">
+                    <h3>Labels</h3>
+                    <div class="label">
+                        <span class="label-color" style="background: #FF6B9D"></span> Personal
+                    </div>
+                    <div class="label">
+                        <span class="label-color" style="background: #00F5FF"></span> Work
+                    </div>
+                    <div class="label">
+                        <span class="label-color" style="background: #FF9E00"></span> Important
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Email List -->
+            <main class="mail-main">
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <span data-lucide="search"></span>
+                    <input type="text" placeholder="Search emails...">
+                </div>
+
+                <!-- Email List -->
+                <div class="email-list">
+                    <div class="email-item unread">
+                        <div class="email-checkbox">
+                            <input type="checkbox">
+                        </div>
+                        <div class="email-sender">
+                            <div class="sender-avatar">T</div>
+                            <span class="sender-name">Team Zeno</span>
+                        </div>
+                        <div class="email-content">
+                            <div class="email-subject">
+                                Welcome to Zeno Mail!
+                                <span class="email-label" style="background: #FF9E00">Important</span>
+                            </div>
+                            <div class="email-preview">
+                                Get started with your new email client...
+                            </div>
+                        </div>
+                        <div class="email-time">10:30 AM</div>
+                        <div class="email-actions">
+                            <button><span data-lucide="archive"></span></button>
+                            <button><span data-lucide="trash-2"></span></button>
+                        </div>
+                    </div>
+
+                    <div class="email-item">
+                        <div class="email-checkbox">
+                            <input type="checkbox">
+                        </div>
+                        <div class="email-sender">
+                            <div class="sender-avatar">C</div>
+                            <span class="sender-name">Calendar Alert</span>
+                        </div>
+                        <div class="email-content">
+                            <div class="email-subject">Meeting at 2:00 PM</div>
+                            <div class="email-preview">Team planning session in Conference Room A</div>
+                        </div>
+                        <div class="email-time">9:15 AM</div>
+                        <div class="email-actions">
+                            <button><span data-lucide="archive"></span></button>
+                            <button><span data-lucide="trash-2"></span></button>
+                        </div>
+                    </div>
+
+                    <div class="email-item">
+                        <div class="email-checkbox">
+                            <input type="checkbox">
+                        </div>
+                        <div class="email-sender">
+                            <div class="sender-avatar">G</div>
+                            <span class="sender-name">GitHub</span>
+                        </div>
+                        <div class="email-content">
+                            <div class="email-subject">Repository updated</div>
+                            <div class="email-preview">Your repository zeno has been updated</div>
+                        </div>
+                        <div class="email-time">Yesterday</div>
+                        <div class="email-actions">
+                            <button><span data-lucide="archive"></span></button>
+                            <button><span data-lucide="trash-2"></span></button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Email Viewer (Initially hidden) -->
+            <div class="email-viewer">
+                <div class="email-viewer-header">
+                    <button class="close-viewer">
+                        <span data-lucide="x"></span>
+                    </button>
+                    <h2>Email Subject</h2>
+                </div>
+                <div class="email-viewer-content">
+                    <!-- Email content loads here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Compose Modal -->
+        <div class="compose-modal">
+            <div class="compose-header">
+                <h3>New Message</h3>
+                <button class="close-compose">
+                    <span data-lucide="x"></span>
+                </button>
+            </div>
+            <div class="compose-body">
+                <input type="text" placeholder="To" class="compose-to">
+                <input type="text" placeholder="Subject" class="compose-subject">
+                <textarea placeholder="Write your message here..." class="compose-body-text"></textarea>
+            </div>
+            <div class="compose-footer">
+                <button class="btn-primary">Send</button>
+                <button class="btn-outline">Save Draft</button>
+                <button class="btn-outline">Discard</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+    <script>
+        // Initialize icons
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.lucide) {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>
