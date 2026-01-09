@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zeno Home - Dashboard</title>
+    
+    <!-- Design System -->
+    <link rel="stylesheet" href="../../packages/design-system/theme.css">
+    
+    <!-- Home-specific styles -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <!-- Lucide Icons (CDN - you'll replace with local SVGs later) -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js" defer></script>
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="../../public/favicon.svg">
+    
+    <!-- PWA Support -->
+    <link rel="manifest" href="../../public/manifest.json">
+    <meta name="theme-color" content="#0D1B2A">
+</head>
+<body data-theme="light">
+    <div class="zeno-app">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <svg class="logo-icon" width="32" height="32" viewBox="0 0 32 32">
+                        <!-- Zeno Logo - Simple Z shape -->
+                        <path d="M6 6 L26 6 L6 26 L26 26" stroke="currentColor" stroke-width="3" fill="none" stroke-linecap="round"/>
+                        <circle cx="16" cy="16" r="4" fill="currentColor"/>
+                    </svg>
+                    <h1 class="logo-text">Zeno</h1>
+                </div>
+                <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle sidebar">
+                    <span class="toggle-icon"></span>
+                </button>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <ul class="nav-list">
+                    <li class="nav-item active">
+                        <a href="#" class="nav-link" data-app="home">
+                            <span class="nav-icon" data-lucide="layout-dashboard"></span>
+                            <span class="nav-text">Home</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-app="mail">
+                            <span class="nav-icon" data-lucide="mail"></span>
+                            <span class="nav-text">Mail</span>
+                            <span class="nav-badge">3</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-app="calendar">
+                            <span class="nav-icon" data-lucide="calendar"></span>
+                            <span class="nav-text">Calendar</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-app="cloud">
+                            <span class="nav-icon" data-lucide="cloud"></span>
+                            <span class="nav-text">Cloud</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-app="connect">
+                            <span class="nav-icon" data-lucide="message-square"></span>
+                            <span class="nav-text">Connect</span>
+                            <span class="nav-badge">5</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" data-app="maps">
+                            <span class="nav-icon" data-lucide="map"></span>
+                            <span class="nav-text">Maps</span>
+                        </a>
+                    </li>
+                </ul>
+                
+                <div class="sidebar-footer">
+                    <div class="user-profile">
+                        <div class="user-avatar">
+                            <span class="avatar-initials">U</span>
+                        </div>
+                        <div class="user-info">
+                            <span class="user-name">User</span>
+                            <span class="user-status">Online</span>
+                        </div>
+                    </div>
+                    
+                    <div class="theme-switcher">
+                        <button class="theme-btn" id="theme-light" aria-label="Light theme">
+                            <span data-lucide="sun"></span>
+                        </button>
+                        <button class="theme-btn" id="theme-dark" aria-label="Dark theme">
+                            <span data-lucide="moon"></span>
+                        </button>
+                        <button class="theme-btn" id="theme-auto" aria-label="Auto theme">
+                            <span data-lucide="monitor"></span>
+                        </button>
+                    </div>
+                </div>
+            </nav>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Top Header -->
+            <header class="main-header">
+                <div class="search-container">
+                    <div class="search-box">
+                        <span class="search-icon" data-lucide="search"></span>
+                        <input type="search" 
+                               class="search-input" 
+                               id="global-search"
+                               placeholder="Search across Zeno..."
+                               aria-label="Search across all applications">
+                        <div class="search-shortcut">⌘K</div>
+                    </div>
+                </div>
+                
+                <div class="header-actions">
+                    <button class="header-btn" id="notifications-btn" aria-label="Notifications">
+                        <span data-lucide="bell"></span>
+                        <span class="notification-badge">2</span>
+                    </button>
+                    <button class="header-btn" id="quick-add-btn" aria-label="Quick add">
+                        <span data-lucide="plus"></span>
+                    </button>
+                    <button class="header-btn" id="help-btn" aria-label="Help">
+                        <span data-lucide="help-circle"></span>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Dashboard Content -->
+            <div class="dashboard-content">
+                <!-- Welcome Banner -->
+                <section class="welcome-banner">
+                    <div class="welcome-content">
+                        <h2 class="welcome-title">Welcome back, User</h2>
+                        <p class="welcome-subtitle">Here's what's happening with your apps today.</p>
+                        <div class="welcome-actions">
+                            <button class="btn btn-primary" id="compose-email">
+                                <span data-lucide="mail"></span>
+                                New Email
+                            </button>
+                            <button class="btn btn-secondary" id="create-event">
+                                <span data-lucide="calendar-plus"></span>
+                                New Event
+                            </button>
+                            <button class="btn btn-outline" id="upload-file">
+                                <span data-lucide="upload"></span>
+                                Upload File
+                            </button>
+                        </div>
+                    </div>
+                    <div class="welcome-stats">
+                        <div class="stat-item">
+                            <span class="stat-value">12</span>
+                            <span class="stat-label">New Emails</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">5</span>
+                            <span class="stat-label">Today's Events</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-value">87%</span>
+                            <span class="stat-label">Cloud Storage</span>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Widgets Grid -->
+                <div class="widgets-grid" id="widgets-grid">
+                    <!-- Mail Widget -->
+                    <div class="widget widget-mail" data-widget="mail">
+                        <div class="widget-header">
+                            <div class="widget-title">
+                                <span data-lucide="mail"></span>
+                                <h3>Recent Mail</h3>
+                            </div>
+                            <div class="widget-actions">
+                                <button class="widget-action-btn" aria-label="Refresh">
+                                    <span data-lucide="refresh-cw"></span>
+                                </button>
+                                <button class="widget-action-btn" aria-label="Settings">
+                                    <span data-lucide="settings"></span>
+                                </button>
+                                <button class="widget-action-btn" aria-label="Expand">
+                                    <span data-lucide="maximize-2"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <div class="email-list">
+                                <div class="email-item unread">
+                                    <div class="email-sender">
+                                        <span class="sender-avatar">T</span>
+                                        <div class="sender-info">
+                                            <span class="sender-name">Team Zeno</span>
+                                            <span class="email-time">10:30 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="email-preview">
+                                        <strong class="email-subject">Welcome to Zeno!</strong>
+                                        <p class="email-excerpt">Get started with your unified dashboard...</p>
+                                    </div>
+                                </div>
+                                <div class="email-item">
+                                    <div class="email-sender">
+                                        <span class="sender-avatar">C</span>
+                                        <div class="sender-info">
+                                            <span class="sender-name">Calendar Alert</span>
+                                            <span class="email-time">9:15 AM</span>
+                                        </div>
+                                    </div>
+                                    <div class="email-preview">
+                                        <strong class="email-subject">Meeting at 2:00 PM</strong>
+                                        <p class="email-excerpt">Team planning session in Conference Room A</p>
+                                    </div>
+                                </div>
+                                <div class="email-item">
+                                    <div class="email-sender">
+                                        <span class="sender-avatar">S</span>
+                                        <div class="sender-info">
+                                            <span class="sender-name">System</span>
+                                            <span class="email-time">Yesterday</span>
+                                        </div>
+                                    </div>
+                                    <div class="email-preview">
+                                        <strong class="email-subject">Weekly Backup Complete</strong>
+                                        <p class="email-excerpt">Your data has been backed up to GitHub</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="widget-footer-btn">
+                                View All Emails
+                                <span data-lucide="arrow-right"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Calendar Widget -->
+                    <div class="widget widget-calendar" data-widget="calendar">
+                        <div class="widget-header">
+                            <div class="widget-title">
+                                <span data-lucide="calendar"></span>
+                                <h3>Today's Schedule</h3>
+                            </div>
+                            <div class="widget-actions">
+                                <button class="widget-action-btn" aria-label="Add event">
+                                    <span data-lucide="plus"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <div class="calendar-date">
+                                <span class="current-date">Monday, January 15</span>
+                            </div>
+                            <div class="events-list">
+                                <div class="event-item">
+                                    <div class="event-time">
+                                        <span class="event-start">2:00 PM</span>
+                                        <span class="event-end">3:00 PM</span>
+                                    </div>
+                                    <div class="event-details">
+                                        <strong class="event-title">Team Planning</strong>
+                                        <span class="event-location">Conference Room A</span>
+                                    </div>
+                                    <button class="event-action" aria-label="Join meeting">
+                                        <span data-lucide="video"></span>
+                                    </button>
+                                </div>
+                                <div class="event-item">
+                                    <div class="event-time">
+                                        <span class="event-start">4:30 PM</span>
+                                        <span class="event-end">5:30 PM</span>
+                                    </div>
+                                    <div class="event-details">
+                                        <strong class="event-title">Design Review</strong>
+                                        <span class="event-location">Zoom Meeting</span>
+                                    </div>
+                                    <button class="event-action" aria-label="Join meeting">
+                                        <span data-lucide="video"></span>
+                                    </button>
+                                </div>
+                                <div class="event-item">
+                                    <div class="event-time">
+                                        <span class="event-start">6:00 PM</span>
+                                        <span class="event-end">7:00 PM</span>
+                                    </div>
+                                    <div class="event-details">
+                                        <strong class="event-title">Project Sync</strong>
+                                        <span class="event-location">Slack Huddle</span>
+                                    </div>
+                                    <button class="event-action" aria-label="Join meeting">
+                                        <span data-lucide="phone"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="widget-footer-btn">
+                                View Full Calendar
+                                <span data-lucide="arrow-right"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Quick Notes Widget -->
+                    <div class="widget widget-notes" data-widget="notes">
+                        <div class="widget-header">
+                            <div class="widget-title">
+                                <span data-lucide="sticky-note"></span>
+                                <h3>Quick Notes</h3>
+                            </div>
+                            <div class="widget-actions">
+                                <button class="widget-action-btn" aria-label="Save note">
+                                    <span data-lucide="save"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <div class="notes-editor">
+                                <textarea class="note-input" 
+                                          id="quick-note"
+                                          placeholder="Start typing your note here..."></textarea>
+                                <div class="notes-toolbar">
+                                    <button class="toolbar-btn" aria-label="Bold">
+                                        <span data-lucide="bold"></span>
+                                    </button>
+                                    <button class="toolbar-btn" aria-label="Italic">
+                                        <span data-lucide="italic"></span>
+                                    </button>
+                                    <button class="toolbar-btn" aria-label="List">
+                                        <span data-lucide="list"></span>
+                                    </button>
+                                    <button class="toolbar-btn" aria-label="Attachment">
+                                        <span data-lucide="paperclip"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="recent-notes">
+                                <h4>Recent Notes</h4>
+                                <div class="note-item">
+                                    <span class="note-title">Meeting Notes</span>
+                                    <span class="note-date">Yesterday</span>
+                                </div>
+                                <div class="note-item">
+                                    <span class="note-title">Project Ideas</span>
+                                    <span class="note-date">Jan 12</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Cloud Widget -->
+                    <div class="widget widget-cloud" data-widget="cloud">
+                        <div class="widget-header">
+                            <div class="widget-title">
+                                <span data-lucide="cloud"></span>
+                                <h3>Recent Files</h3>
+                            </div>
+                            <div class="widget-actions">
+                                <button class="widget-action-btn" aria-label="Upload file">
+                                    <span data-lucide="upload"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <div class="storage-info">
+                                <div class="storage-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" style="width: 87%"></div>
+                                    </div>
+                                    <div class="storage-text">
+                                        <span>87% used</span>
+                                        <span>14.2 GB of 16 GB</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="files-list">
+                                <div class="file-item">
+                                    <div class="file-icon">
+                                        <span data-lucide="file-text"></span>
+                                    </div>
+                                    <div class="file-info">
+                                        <span class="file-name">Project_Plan.pdf</span>
+                                        <span class="file-meta">Updated 2 hours ago • 2.1 MB</span>
+                                    </div>
+                                    <button class="file-action" aria-label="More options">
+                                        <span data-lucide="more-vertical"></span>
+                                    </button>
+                                </div>
+                                <div class="file-item">
+                                    <div class="file-icon">
+                                        <span data-lucide="image"></span>
+                                    </div>
+                                    <div class="file-info">
+                                        <span class="file-name">Design_Mockups.png</span>
+                                        <span class="file-meta">Updated yesterday • 4.7 MB</span>
+                                    </div>
+                                    <button class="file-action" aria-label="More options">
+                                        <span data-lucide="more-vertical"></span>
+                                    </button>
+                                </div>
+                                <div class="file-item">
+                                    <div class="file-icon">
+                                        <span data-lucide="file-spreadsheet"></span>
+                                    </div>
+                                    <div class="file-info">
+                                        <span class="file-name">Budget_2024.xlsx</span>
+                                        <span class="file-meta">Updated Jan 10 • 1.8 MB</span>
+                                    </div>
+                                    <button class="file-action" aria-label="More options">
+                                        <span data-lucide="more-vertical"></span>
+                                    </button>
+                                </div>
+                            </div>
+                            <button class="widget-footer-btn">
+                                Open Cloud
+                                <span data-lucide="arrow-right"></span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Activity Feed Widget -->
+                    <div class="widget widget-activity" data-widget="activity">
+                        <div class="widget-header">
+                            <div class="widget-title">
+                                <span data-lucide="activity"></span>
+                                <h3>Recent Activity</h3>
+                            </div>
+                            <div class="widget-actions">
+                                <button class="widget-action-btn" aria-label="Mark all as read">
+                                    <span data-lucide="check"></span>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <div class="activity-list">
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <span data-lucide="calendar-plus"></span>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>You created <strong>Team Planning</strong> event</p>
+                                        <span class="activity-time">10 minutes ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <span data-lucide="upload"></span>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>You uploaded <strong>Project_Plan.pdf</strong></p>
+                                        <span class="activity-time">2 hours ago</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <span data-lucide="github"></span>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>System backup completed to GitHub</p>
+                                        <span class="activity-time">Yesterday, 11:30 PM</span>
+                                    </div>
+                                </div>
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <span data-lucide="mail"></span>
+                                    </div>
+                                    <div class="activity-content">
+                                        <p>You received mail from <strong>Team Zeno</strong></p>
+                                        <span class="activity-time">Yesterday, 3:45 PM</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Weather Widget -->
+                    <div class="widget widget-weather" data-widget="weather">
+                        <div class="widget-header">
+                            <div class="widget-title">
+                                <span data-lucide="cloud-sun"></span>
+                                <h3>Weather</h3>
+                            </div>
+                        </div>
+                        <div class="widget-content">
+                            <div class="weather-current">
+                                <div class="weather-temp">
+                                    <span class="temp-value">72°</span>
+                                    <span class="temp-unit">F</span>
+                                </div>
+                                <div class="weather-info">
+                                    <span class="weather-condition">Partly Cloudy</span>
+                                    <span class="weather-location">San Francisco, CA</span>
+                                </div>
+                            </div>
+                            <div class="weather-forecast">
+                                <div class="forecast-item">
+                                    <span class="forecast-day">Tue</span>
+                                    <span class="forecast-icon" data-lucide="sun"></span>
+                                    <span class="forecast-temp">75°</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="forecast-day">Wed</span>
+                                    <span class="forecast-icon" data-lucide="cloud-rain"></span>
+                                    <span class="forecast-temp">68°</span>
+                                </div>
+                                <div class="forecast-item">
+                                    <span class="forecast-day">Thu</span>
+                                    <span class="forecast-icon" data-lucide="cloud"></span>
+                                    <span class="forecast-temp">70°</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Notifications Panel (Hidden by default) -->
+            <div class="notifications-panel" id="notifications-panel">
+                <div class="notifications-header">
+                    <h3>Notifications</h3>
+                    <button class="close-panel" id="close-notifications">
+                        <span data-lucide="x"></span>
+                    </button>
+                </div>
+                <div class="notifications-list">
+                    <!-- Notifications will be loaded here -->
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="app.js" defer></script>
+    <script>
+        // Initialize Lucide icons
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof lucide !== 'undefined') {
+                lucide.createIcons();
+            }
+        });
+    </script>
+</body>
+</html>

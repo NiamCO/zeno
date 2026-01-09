@@ -1,0 +1,32 @@
+# Dependencies
+node_modules/
+package-lock.json
+
+# User data (never commit personal data)
+/data/
+*.localstorage
+*.localstorage-journal
+
+# Environment variables
+.env
+.env.local
+
+# IDE files
+.vscode/
+.idea/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+
+# Build outputs
+/dist/
+/build/

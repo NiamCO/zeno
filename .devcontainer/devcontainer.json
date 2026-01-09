@@ -1,0 +1,25 @@
+{
+  "name": "Zeno Development",
+  "image": "mcr.microsoft.com/vscode/devcontainers/universal:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/node:1": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "ritwickdey.LiveServer",
+        "michelemelluso.gitignore",
+        "eamodio.gitlens"
+      ],
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.tabSize": 2,
+        "files.autoSave": "afterDelay"
+      }
+    }
+  },
+  "postCreateCommand": "echo 'Zeno development environment ready!'",
+  "forwardPorts": [5500, 8080]
+}

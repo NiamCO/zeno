@@ -1,0 +1,180 @@
+/* ZENO DESIGN SYSTEM - QUANTUM BLUE THEME */
+
+:root {
+  /* Primary Color Palette */
+  --zeno-primary: #0D1B2A;      /* Deep Space Blue */
+  --zeno-secondary: #415A77;    /* Slate Blue */
+  --zeno-accent: #FF9E00;       /* Amber Gold */
+  --zeno-background: #F8F9FA;   /* Light Gray */
+  --zeno-surface: #FFFFFF;      /* White */
+  --zeno-text-primary: #212529; /* Charcoal */
+  --zeno-text-secondary: #6C757D; /* Medium Gray */
+  --zeno-text-tertiary: #ADB5BD; /* Light Gray */
+  
+  /* Semantic Colors */
+  --zeno-success: #2E7D32;      /* Forest Green */
+  --zeno-warning: #ED6C02;      /* Burnt Orange */
+  --zeno-error: #D32F2F;        /* Crimson */
+  --zeno-info: #0288D1;         /* Azure Blue */
+  
+  /* Interactive States */
+  --zeno-hover: rgba(13, 27, 42, 0.04);
+  --zeno-active: rgba(13, 27, 42, 0.08);
+  --zeno-focus: rgba(255, 158, 0, 0.16);
+  --zeno-disabled: rgba(108, 117, 125, 0.38);
+  
+  /* Elevation Shadows */
+  --zeno-shadow-xs: 0 1px 2px rgba(13, 27, 42, 0.05);
+  --zeno-shadow-sm: 0 2px 4px rgba(13, 27, 42, 0.08);
+  --zeno-shadow-md: 0 4px 8px rgba(13, 27, 42, 0.12);
+  --zeno-shadow-lg: 0 8px 16px rgba(13, 27, 42, 0.16);
+  --zeno-shadow-xl: 0 16px 32px rgba(13, 27, 42, 0.2);
+  
+  /* Border Radius */
+  --zeno-radius-xs: 2px;
+  --zeno-radius-sm: 4px;
+  --zeno-radius-md: 8px;
+  --zeno-radius-lg: 12px;
+  --zeno-radius-xl: 16px;
+  --zeno-radius-round: 50%;
+  --zeno-radius-pill: 9999px;
+  
+  /* Spacing Scale */
+  --zeno-space-1: 4px;
+  --zeno-space-2: 8px;
+  --zeno-space-3: 12px;
+  --zeno-space-4: 16px;
+  --zeno-space-5: 20px;
+  --zeno-space-6: 24px;
+  --zeno-space-8: 32px;
+  --zeno-space-10: 40px;
+  --zeno-space-12: 48px;
+  --zeno-space-16: 64px;
+  --zeno-space-20: 80px;
+  
+  /* Typography Scale */
+  --zeno-font-xs: 0.75rem;     /* 12px */
+  --zeno-font-sm: 0.875rem;    /* 14px */
+  --zeno-font-base: 1rem;      /* 16px */
+  --zeno-font-lg: 1.125rem;    /* 18px */
+  --zeno-font-xl: 1.25rem;     /* 20px */
+  --zeno-font-2xl: 1.5rem;     /* 24px */
+  --zeno-font-3xl: 1.875rem;   /* 30px */
+  --zeno-font-4xl: 2.25rem;    /* 36px */
+  
+  /* Font Weights */
+  --zeno-font-light: 300;
+  --zeno-font-regular: 400;
+  --zeno-font-medium: 500;
+  --zeno-font-semibold: 600;
+  --zeno-font-bold: 700;
+  
+  /* Line Heights */
+  --zeno-leading-tight: 1.25;
+  --zeno-leading-snug: 1.375;
+  --zeno-leading-normal: 1.5;
+  --zeno-leading-relaxed: 1.625;
+  --zeno-leading-loose: 2;
+  
+  /* Transitions */
+  --zeno-transition-fast: 150ms ease;
+  --zeno-transition-base: 250ms ease;
+  --zeno-transition-slow: 350ms ease;
+  
+  /* Z-index Layers */
+  --zeno-z-dropdown: 1000;
+  --zeno-z-sticky: 1020;
+  --zeno-z-fixed: 1030;
+  --zeno-z-modal-backdrop: 1040;
+  --zeno-z-modal: 1050;
+  --zeno-z-popover: 1060;
+  --zeno-z-tooltip: 1070;
+  --zeno-z-toast: 1080;
+}
+
+/* Dark Theme Variables */
+[data-theme="dark"] {
+  --zeno-primary: #0A1422;
+  --zeno-secondary: #33475C;
+  --zeno-background: #121212;
+  --zeno-surface: #1E1E1E;
+  --zeno-text-primary: #E9ECEF;
+  --zeno-text-secondary: #CED4DA;
+  --zeno-text-tertiary: #6C757D;
+  --zeno-hover: rgba(255, 255, 255, 0.04);
+  --zeno-active: rgba(255, 255, 255, 0.08);
+}
+
+/* High Contrast Theme */
+[data-theme="high-contrast"] {
+  --zeno-primary: #000000;
+  --zeno-secondary: #333333;
+  --zeno-accent: #FFFF00;
+  --zeno-background: #FFFFFF;
+  --zeno-surface: #FFFFFF;
+  --zeno-text-primary: #000000;
+  --zeno-text-secondary: #333333;
+  --zeno-border: #000000;
+}
+
+/* Base Styles Applied to All Elements */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  background-color: var(--zeno-background);
+  color: var(--zeno-text-primary);
+  line-height: var(--zeno-leading-normal);
+  transition: background-color var(--zeno-transition-base),
+              color var(--zeno-transition-base);
+}
+
+/* Focus Outline for Accessibility */
+:focus-visible {
+  outline: 2px solid var(--zeno-accent);
+  outline-offset: 2px;
+}
+
+/* Remove focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Selection Color */
+::selection {
+  background-color: rgba(255, 158, 0, 0.3);
+  color: var(--zeno-text-primary);
+}
+
+/* Scrollbar Styling */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--zeno-background);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--zeno-secondary);
+  border-radius: var(--zeno-radius-pill);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--zeno-accent);
+}

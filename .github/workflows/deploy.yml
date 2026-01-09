@@ -1,0 +1,269 @@
+name: Deploy Zeno to GitHub Pages
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+  workflow_dispatch:  # Allows manual trigger
+
+# Sets permissions for the workflow
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+# Allow only one concurrent deployment
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
+
+jobs:
+  build-and-deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Fetch all history for proper versioning
+          
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+          cache: 'npm'
+          
+      - name: Create minimal package.json if missing
+        run: |
+          if [ ! -f "package.json" ]; then
+            echo '{
+              "name": "zeno",
+              "version": "1.0.0",
+              "private": true,
+              "scripts": {
+                "deploy": "node scripts/deploy.js"
+              }
+            }' > package.json
+          fi
+          
+      - name: Install dependencies (if any)
+        run: |
+          # Install gh-pages for deployment if needed
+          if [ -f "package.json" ]; then
+            npm ci --omit=dev
+          fi
+          
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+        
+      - name: Build with custom script
+        run: |
+          # Create a simplified build script inline
+          cat > build.js << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          console.log('🚀 Building Zeno for GitHub Pages...');
+          
+          const sourceDir = process.cwd();
+          const buildDir = path.join(sourceDir, '_site');
+          
+          // Clean build directory
+          if (fs.existsSync(buildDir)) {
+            fs.rmSync(buildDir, { recursive: true });
+          }
+          fs.mkdirSync(buildDir, { recursive: true });
+          
+          // Copy and process home page
+          const homePage = path.join(sourceDir, 'apps/home/index.html');
+          if (fs.existsSync(homePage)) {
+            let content = fs.readFileSync(homePage, 'utf8');
+            
+            // Update paths for deployment
+            content = content
+              .replace(/href="\.\.\/\.\.\/packages\/design-system\//g, 'href="packages/design-system/')
+              .replace(/src="\.\.\/\.\.\/packages\//g, 'src="packages/')
+              .replace(/href="\.\.\/\.\.\/public\//g, 'href="')
+              .replace(/src="\.\.\/\.\.\/public\//g, 'src="')
+              .replace(/https:\/\/unpkg\.com\/lucide@latest\/dist\/umd\/lucide\.js/g, 'https://unpkg.com/lucide@latest')
+              .replace(/https:\/\/fonts\.googleapis\.com\/css2\?family=Inter/g, 'https://fonts.bunny.net/css?family=inter');
+            
+            fs.writeFileSync(path.join(buildDir, 'index.html'), content);
+            console.log('✓ Processed index.html');
+          }
+          
+          // Copy design system
+          const designSystemDir = path.join(sourceDir, 'packages/design-system');
+          if (fs.existsSync(designSystemDir)) {
+            const destDir = path.join(buildDir, 'packages/design-system');
+            fs.mkdirSync(destDir, { recursive: true });
+            fs.copyFileSync(
+              path.join(designSystemDir, 'theme.css'),
+              path.join(destDir, 'theme.css')
+            );
+            console.log('✓ Copied design system');
+          }
+          
+          // Copy home styles
+          const homeStyles = path.join(sourceDir, 'apps/home/styles.css');
+          if (fs.existsSync(homeStyles)) {
+            fs.copyFileSync(homeStyles, path.join(buildDir, 'styles.css'));
+            console.log('✓ Copied styles.css');
+          }
+          
+          // Copy home JavaScript
+          const homeJS = path.join(sourceDir, 'apps/home/app.js');
+          if (fs.existsSync(homeJS)) {
+            fs.copyFileSync(homeJS, path.join(buildDir, 'app.js'));
+            console.log('✓ Copied app.js');
+          }
+          
+          // Copy public assets
+          const publicDir = path.join(sourceDir, 'public');
+          if (fs.existsSync(publicDir)) {
+            const copyDir = (src, dest) => {
+              fs.mkdirSync(dest, { recursive: true });
+              const items = fs.readdirSync(src);
+              items.forEach(item => {
+                const srcPath = path.join(src, item);
+                const destPath = path.join(dest, item);
+                if (fs.statSync(srcPath).isDirectory()) {
+                  copyDir(srcPath, destPath);
+                } else {
+                  fs.copyFileSync(srcPath, destPath);
+                }
+              });
+            };
+            copyDir(publicDir, buildDir);
+            console.log('✓ Copied public assets');
+          }
+          
+          // Create 404 page
+          const notFoundPage = `<!DOCTYPE html>
+          <html>
+          <head>
+              <meta charset="UTF-8">
+              <title>Page Not Found - Zeno</title>
+              <link rel="stylesheet" href="packages/design-system/theme.css">
+              <style>
+                  body { 
+                      display: flex; 
+                      justify-content: center; 
+                      align-items: center; 
+                      min-height: 100vh; 
+                      margin: 0; 
+                      background: var(--zeno-primary);
+                      color: white;
+                      text-align: center;
+                      padding: 20px;
+                  }
+                  .container { max-width: 500px; }
+                  h1 { font-size: 4rem; margin: 0; color: var(--zeno-accent); }
+                  a { color: var(--zeno-accent); font-weight: bold; }
+              </style>
+          </head>
+          <body>
+              <div class="container">
+                  <h1>404</h1>
+                  <p>The page you're looking for doesn't exist.</p>
+                  <p><a href="/">Return to Zeno Dashboard</a></p>
+              </div>
+          </body>
+          </html>`;
+          
+          fs.writeFileSync(path.join(buildDir, '404.html'), notFoundPage);
+          console.log('✓ Created 404.html');
+          
+          // Create .nojekyll file
+          fs.writeFileSync(path.join(buildDir, '.nojekyll'), '');
+          console.log('✓ Created .nojekyll');
+          
+          console.log('✅ Build complete!');
+          EOF
+          
+          node build.js
+          
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+          
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+        
+      - name: Generate deployment summary
+        run: |
+          echo "## 🚀 Zeno Deployment Complete" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**🌐 Your Zeno dashboard is now live at:**" >> $GITHUB_STEP_SUMMARY
+          echo "[${{ steps.deployment.outputs.page_url }}](${{ steps.deployment.outputs.page_url }})" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**📊 Build Information:**" >> $GITHUB_STEP_SUMMARY
+          echo "- **Commit:** \`${{ github.sha }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch:** \`${{ github.ref_name }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Triggered by:** ${{ github.actor }}" >> $GITHUB_STEP_SUMMARY
+          echo "- **Deployment Time:** $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**🔧 Next Steps:**" >> $GITHUB_STEP_SUMMARY
+          echo "1. Visit the URL above to verify deployment" >> $GITHUB_STEP_SUMMARY
+          echo "2. Changes may take 1-2 minutes to appear" >> $GITHUB_STEP_SUMMARY
+          echo "3. To update, push new changes to the main branch" >> $GITHUB_STEP_SUMMARY
+          
+  # Optional: Add a test job
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        
+      - name: Validate HTML structure
+        run: |
+          echo "🔍 Validating essential files..."
+          
+          # Check for required files
+          REQUIRED_FILES=(
+            "apps/home/index.html"
+            "packages/design-system/theme.css"
+            "apps/home/styles.css"
+            "apps/home/app.js"
+            "public/favicon.svg"
+            "public/manifest.json"
+          )
+          
+          for file in "${REQUIRED_FILES[@]}"; do
+            if [ -f "$file" ]; then
+              echo "✓ Found: $file"
+            else
+              echo "✗ Missing: $file"
+              exit 1
+            fi
+          done
+          
+          echo "✅ All required files present"
+          
+      - name: Check for broken links in HTML
+        run: |
+          echo "🔗 Checking HTML structure..."
+          if [ -f "apps/home/index.html" ]; then
+            # Simple check for required elements
+            if grep -q "zeno-app" apps/home/index.html && \
+               grep -q "sidebar" apps/home/index.html && \
+               grep -q "widgets-grid" apps/home/index.html; then
+              echo "✓ HTML structure looks good"
+            else
+              echo "⚠ HTML may be missing key elements"
+            fi
+          fi
+
+# Cache dependencies to speed up workflows
+cache:
+  paths:
+    - node_modules/
+  key: ${{ runner.os }}-node-${{ hashFiles('package.json') }}
+  
